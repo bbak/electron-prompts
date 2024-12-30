@@ -114,6 +114,7 @@ export default class PromptManager {
 				transparent: true,
 				resizable: this.options.resizable,
 				frame: false,
+				show: false,
 			})
 
 			if (!this.options.devMode) {
@@ -121,7 +122,12 @@ export default class PromptManager {
 				// this will also disable the devtools Ctrl+Shift+I shortcut
 				this.windows[uuid].setMenu(null)
 			}
-
+			
+			// Show the window when it's ready
+			this.windows[uuid].once('ready-to-show', () => {
+				this.windows[uuid].show();
+			});
+			
 			this.windows[uuid].on("close", () => {
 				// handle cancel on close
 				this.events.emit("formDone", uuid, null)
